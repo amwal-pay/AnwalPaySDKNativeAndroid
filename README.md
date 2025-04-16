@@ -28,7 +28,6 @@ Add the following dependency to your app's `build.gradle.kts`:
 ```kotlin
 dependencies {
     implementation("com.amwal-pay:amwal_sdk:1.0.66")
-    implementation("com.squareup.okhttp3:okhttp:4.12.0")
 }
 ```
 
@@ -100,12 +99,10 @@ amwalSDK.start(
 
 ### Supported Currencies
 - OMR (Omani Rial)
-- Other currencies as supported by the SDK
 
 ### Transaction Types
 - NFC
 - CARD_WALLET
-- GOOGLE_PAY
 
 ### Environment Support
 - SIT (System Integration Testing)
