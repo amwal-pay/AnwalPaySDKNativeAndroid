@@ -6,9 +6,6 @@ workflows:
       vars:
         GRADLE_USER_HOME: ~/.gradle
         APP_CENTER_TOKEN: $APP_CENTER_TOKEN # Set this in Codemagic UI
-        KEYSTORE_PASSWORD: $KEYSTORE_PASSWORD # Set this in Codemagic UI
-        KEY_ALIAS: amwal_key # The alias we used when creating the keystore
-        KEY_PASSWORD: $KEY_PASSWORD # Set this in Codemagic UI
     scripts:
       - name: Install AppCenter CLI
         script: |
@@ -21,17 +18,7 @@ workflows:
       - name: Build Android App
         script: |
           chmod +x ./gradlew
-          ./gradlew assembleRelease --stacktrace \
-            -PKEYSTORE_PASSWORD=$KEYSTORE_PASSWORD \
-            -PKEY_ALIAS=$KEY_ALIAS \
-            -PKEY_PASSWORD=$KEY_PASSWORD
-      - name: Verify APK exists
-        script: |
-          if [ ! -f "app/build/outputs/apk/release/app-release.apk" ]; then
-            echo "APK file not found!"
-            ls -la app/build/outputs/apk/release/
-            exit 1
-          fi
+          ./gradlew assembleRelease 
       - name: Upload to AppCenter
         script: |
           APK_PATH="app/build/outputs/apk/release/app-release.apk"
