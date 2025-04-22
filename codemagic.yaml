@@ -1,0 +1,42 @@
+workflows:
+  android-build:
+    name: Android Build
+    max_build_duration: 60
+    environment:
+      vars:
+        JAVA_HOME: /usr/lib/jvm/java-11-openjdk-amd64
+        GRADLE_USER_HOME: ~/.gradle
+        APP_CENTER_TOKEN: $APP_CENTER_TOKEN # Set this in Codemagic UI
+    scripts:
+      - name: Set up Java
+        script: |
+          sudo apt-get --quiet update --yes
+          sudo apt-get --quiet install --yes openjdk-11-jdk
+      - name: Set up Node.js
+        script: |
+          curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+          sudo apt-get install -y nodejs
+      - name: Install AppCenter CLI
+        script: |
+          npm install -g appcenter-cli
+      - name: Build Android App
+        script: |
+          chmod +x ./gradlew
+          ./gradlew assembleRelease
+      - name: Upload to AppCenter
+        script: |
+          appcenter distribute release \
+            --group qc \
+            --file "app/build/outputs/apk/release/app-release.apk" \
+            --app Amwal-Pay/Amwal-Native-SDK \
+            --token "${APP_CENTER_TOKEN}" \
+            --quiet
+    artifacts:
+      - app/build/outputs/apk/release/*.apk
+    publishing:
+      email:
+        recipients:
+          - amr.elskaan@amwal-pay.com
+        notify:
+          success: true
+          failure: true 
