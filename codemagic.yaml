@@ -4,7 +4,6 @@ workflows:
     max_build_duration: 60
     environment:
       vars:
-        JAVA_HOME: /usr/lib/jvm/java-11-openjdk-amd64
         GRADLE_USER_HOME: ~/.gradle
         APP_CENTER_TOKEN: $APP_CENTER_TOKEN # Set this in Codemagic UI
     scripts:
