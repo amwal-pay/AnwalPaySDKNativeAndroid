@@ -1,6 +1,6 @@
 # Amwal Pay SDK Integration Guide
 
-This guide demonstrates how to integrate the Amwal Pay SDK (version 1.0.66) into your Android application.
+This guide demonstrates how to integrate the Amwal Pay SDK (version 1.0.70) into your Android application.
 
 ## Table of Contents
 - [Prerequisites](#prerequisites)
@@ -27,7 +27,7 @@ Add the following dependency to your app's `build.gradle.kts`:
 
 ```kotlin
 dependencies {
-    implementation("com.amwal-pay:amwal_sdk:1.0.66")
+    implementation("com.amwal-pay:amwal_sdk:1.0.70")
 }
 ```
 
@@ -37,6 +37,8 @@ dependencies {
 
 ```xml
 <uses-permission android:name="android.permission.INTERNET"/>
+<uses-permission android:name="android.permission.NFC"/>
+<uses-feature android:name="android.hardware.nfc" android:required="true"/>
 ```
 
 2. Initialize the SDK in your application:
@@ -74,7 +76,7 @@ val config = AmwalSDK.Config(
     terminalId = "YOUR_TERMINAL_ID",
     locale = Locale("en"), // or "ar" for Arabic
     customerId = customerId, // Optional
-    isSoftPOS = true // Set to true for NFC transactions
+    transactionType = AmwalSDK.Config.TransactionType.NFC // For NFC transactions
 )
 ```
 
@@ -86,7 +88,17 @@ amwalSDK.start(
     config = config,
     onResponse = { response ->
         // Handle the payment response
-        Log.d("Payment", "Response: $response")
+        when (response) {
+            is AmwalSDK.Response.Success -> {
+                Log.d("Payment", "Transaction successful: ${response.transactionId}")
+            }
+            is AmwalSDK.Response.Error -> {
+                Log.e("Payment", "Transaction failed: ${response.message}")
+            }
+            is AmwalSDK.Response.Cancelled -> {
+                Log.d("Payment", "Transaction cancelled by user")
+            }
+        }
     },
     onCustomerId = { customerId ->
         // Handle the customer ID
@@ -101,13 +113,27 @@ amwalSDK.start(
 - OMR (Omani Rial)
 
 ### Transaction Types
-- NFC
+- NFC (Near Field Communication)
+  - Use `TransactionType.NFC` for NFC transactions
+  - Requires NFC hardware support
+  - Requires NFC permission in manifest
 - CARD_WALLET
+  - Use `TransactionType.CARD_WALLET` for digital wallet transactions
+  - Card-based payments
+- GOOGLE_PAY
+  - Use `TransactionType.GOOGLE_PAY` for Google Pay transactions
+  - Requires Google Pay setup
 
 ### Environment Support
 - SIT (System Integration Testing)
+  - Use for initial development and testing
+  - Test environment with mock data
 - UAT (User Acceptance Testing)
+  - Use for pre-production testing
+  - Real environment with test data
 - PROD (Production)
+  - Use for live transactions
+  - Real environment with real data
 
 ## Security
 
@@ -125,30 +151,49 @@ val secureHash = SecureHashUtil.clearSecureHash(
 
 ## Error Handling
 
-The SDK provides error handling through callbacks. Always implement proper error handling in your application:
+The SDK provides comprehensive error handling through callbacks. Always implement proper error handling in your application:
 
 ```kotlin
 try {
     // SDK operations
-} catch (e: Exception) {
-    // Handle errors appropriately
-    showErrorDialog("Something Went Wrong")
+} catch (e: AmwalSDKException) {
+    when (e) {
+        is AmwalSDKException.NetworkError -> {
+            // Handle network-related errors
+            showErrorDialog("Network connection error")
+        }
+        is AmwalSDKException.InvalidConfiguration -> {
+            // Handle configuration errors
+            showErrorDialog("Invalid configuration")
+        }
+        is AmwalSDKException.NFCNotAvailable -> {
+            // Handle NFC-related errors
+            showErrorDialog("NFC is not available")
+        }
+        else -> {
+            // Handle other errors
+            showErrorDialog("An unexpected error occurred")
+        }
+    }
 }
 ```
 
 ## Best Practices
 
 1. Always use the appropriate environment (SIT/UAT/PROD) for your use case
-2. Implement proper error handling
-3. Store sensitive data securely
-4. Test thoroughly in the test environment before going to production
-5. Keep the SDK updated to the latest version
-6. Follow the security guidelines provided by Amwal Pay
+2. Use the correct TransactionType for your payment method
+3. Implement proper error handling for all possible scenarios
+4. Store sensitive data securely using Android's security best practices
+5. Test thoroughly in the test environment before going to production
+6. Keep the SDK updated to the latest version
+7. Follow the security guidelines provided by Amwal Pay
+8. Check for NFC availability before initiating NFC transactions
+9. Handle configuration changes and lifecycle events properly
 
 ## Support
 
-For technical support or questions, please contact Amwal Pay support team.
+For technical support or questions, please contact Amwal Pay support team at support@amwal-pay.com
 
 ---
 
-**Note**: This documentation is based on SDK version 1.0.66. Please check for updates and new features in newer versions. 
+**Note**: This documentation is based on SDK version 1.0.70. Please check for updates and new features in newer versions. 
