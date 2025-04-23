@@ -49,7 +49,7 @@ private val amwalSDK by lazy { AmwalSDK() }
 
 ## Implementation
 
-### 1. Session Token Generation
+### 1. Session Token Generation (Must do it from backend side)
 
 First, you need to generate a session token using the following code:
 
