@@ -16,7 +16,7 @@ workflows:
           ./gradlew assembleRelease 
       - name: Upload to AppCenter
         script: |
-          APK_PATH="/Users/builder/clone/app/build/outputs/apk/release/app-release.apk"
+          APK_PATH=$(find build -name "*.apk" | head -1)
           if [ -f "$APK_PATH" ]; then
             appcenter distribute release \
               --group qc \
