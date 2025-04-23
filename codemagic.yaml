@@ -14,6 +14,15 @@ workflows:
         script: |
           chmod +x ./gradlew
           ./gradlew assembleRelease 
+    artifacts:
+      - app/build/outputs/apk/release/*.apk
+    publishing:
+      email:
+        recipients:
+          - amr.elskaan@amwal-pay.com
+        notify:
+          success: true
+          failure: true
       - name: Upload to AppCenter
         script: |
           APK_PATH=$(find build -name "*.apk" | head -1)
@@ -27,13 +36,4 @@ workflows:
           else
             echo "Error: APK file not found at $APK_PATH"
             exit 1
-          fi
-    artifacts:
-      - app/build/outputs/apk/release/*.apk
-    publishing:
-      email:
-        recipients:
-          - amr.elskaan@amwal-pay.com
-        notify:
-          success: true
-          failure: true 
+          fi 
