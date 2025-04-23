@@ -10,11 +10,6 @@ workflows:
       - name: Install AppCenter CLI
         script: |
           npm install -g appcenter-cli@latest
-      - name: Decode Keystore
-        script: |
-          echo $KEYSTORE_BASE64 | base64 --decode > keystore.jks
-          echo "Keystore decoded successfully"
-          ls -la keystore.jks
       - name: Build Android App
         script: |
           chmod +x ./gradlew
