@@ -19,7 +19,7 @@ android {
     }
 
     signingConfigs {
-        create("release") {
+         release {
             storeFile = file("../keystore.jks")
             storePassword = "123456"
             keyAlias = "amwal_key"
