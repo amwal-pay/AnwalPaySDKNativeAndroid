@@ -23,17 +23,18 @@ workflows:
         notify:
           success: true
           failure: true
-      - name: Upload to AppCenter
-        script: |
-          APK_PATH=$(find build -name "*.apk" | head -1)
-          if [ -f "$APK_PATH" ]; then
-            appcenter distribute release \
-              --group qc \
-              --file "$APK_PATH" \
-              --app Amwal-Pay/Amwal-Native-SDK \
-              --token "${APP_CENTER_TOKEN}" \
-              --quiet
-          else
-            echo "Error: APK file not found at $APK_PATH"
-            exit 1
-          fi 
+      scripts:
+        - name: Upload to AppCenter
+          script: |
+            APK_PATH=$(find build -name "*.apk" | head -1)
+            if [ -f "$APK_PATH" ]; then
+              appcenter distribute release \
+                --group qc \
+                --file "$APK_PATH" \
+                --app Amwal-Pay/Amwal-Native-SDK \
+                --token "${APP_CENTER_TOKEN}" \
+                --quiet
+            else
+              echo "Error: APK file not found at $APK_PATH"
+              exit 1
+            fi 
