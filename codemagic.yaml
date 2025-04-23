@@ -26,7 +26,7 @@ workflows:
       scripts:
         - name: Upload to AppCenter
           script: |
-            APK_PATH=$(find build -name "*.apk" | head -1)
+            APK_PATH=$(find $CM_BUILD_DIR/app/build/outputs/apk/release -name "*.apk" | head -1)
             if [ -f "$APK_PATH" ]; then
               appcenter distribute release \
                 --group qc \
