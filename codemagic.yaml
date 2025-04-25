@@ -22,7 +22,7 @@ workflows:
           app_id: 1:472921504670:android:c0d1d8c1dbe17499a7748f
           artifact_type: 'apk'
           groups: 
-            - testers
+            - tester
       email:
         recipients:
           - amr.elskaan@amwal-pay.com
