@@ -5,7 +5,7 @@ workflows:
     environment:
       vars:
         GRADLE_USER_HOME: ~/.gradle
-        FIREBASE_TOKEN: $FIREBASE_TOKEN # Set this in Codemagic UI
+        GOOGLE_APPLICATION_CREDENTIALS: $GOOGLE_APPLICATION_CREDENTIALS # Set this in Codemagic UI
     scripts:
       - name: Build Android App
         script: |
@@ -27,7 +27,6 @@ workflows:
             if [ -f "$APK_PATH" ]; then
               firebase appdistribution:distribute "$APK_PATH" \
                 --app 1:472921504670:android:c0d1d8c1dbe17499a7748f \
-                --token "${FIREBASE_TOKEN}" \
                 --groups "testers"
             else
               echo "Error: APK file not found at $APK_PATH"
