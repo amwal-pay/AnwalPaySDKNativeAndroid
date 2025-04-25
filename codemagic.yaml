@@ -5,7 +5,7 @@ workflows:
     environment:
       vars:
         GRADLE_USER_HOME: ~/.gradle
-        GOOGLE_APPLICATION_CREDENTIALS: $GOOGLE_APPLICATION_CREDENTIALS # Set this in Codemagic UI
+        FIREBASE_SERVICE_ACCOUNT: $FIREBASE_SERVICE_ACCOUNT # Set this in Codemagic UI
     scripts:
       - name: Build Android App
         script: |
