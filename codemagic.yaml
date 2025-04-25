@@ -3,6 +3,8 @@ workflows:
     name: Android Build
     max_build_duration: 60
     environment:
+    groups:
+      - firebase_credentials
       vars:
         GRADLE_USER_HOME: ~/.gradle
         FIREBASE_SERVICE_ACCOUNT: $FIREBASE_SERVICE_ACCOUNT # Set this in Codemagic UI
