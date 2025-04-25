@@ -7,7 +7,7 @@ workflows:
         - firebase_credentials
       vars:
         GRADLE_USER_HOME: ~/.gradle
-        FIREBASE_TOKEN: $FIREBASE_TOKEN
+        GOOGLE_APPLICATION_CREDENTIALS: $FIREBASE_SERVICE_ACCOUNT
     scripts:
       - name: Build Android App
         script: |
@@ -17,8 +17,6 @@ workflows:
       - app/build/outputs/apk/release/*.apk
     publishing:
       firebase:
-        firebase_token: $FIREBASE_TOKEN
-        # firebase_service_account: $FIREBASE_SERVICE_ACCOUNT
         android:
           app_id: 1:472921504670:android:c0d1d8c1dbe17499a7748f
           artifact_type: 'apk'
