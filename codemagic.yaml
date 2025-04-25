@@ -7,9 +7,6 @@ workflows:
         GRADLE_USER_HOME: ~/.gradle
         FIREBASE_TOKEN: $FIREBASE_TOKEN # Set this in Codemagic UI
     scripts:
-      - name: Install Firebase CLI
-        script: |
-          npm install -g firebase-tools
       - name: Build Android App
         script: |
           chmod +x ./gradlew
