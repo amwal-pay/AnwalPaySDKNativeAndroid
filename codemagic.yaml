@@ -3,11 +3,11 @@ workflows:
     name: Android Build
     max_build_duration: 60
     environment:
-    groups:
-      - firebase_credentials
-    vars:
-      GRADLE_USER_HOME: ~/.gradle
-      FIREBASE_TOKEN: $FIREBASE_TOKEN # Set this in Codemagic UI
+      groups:
+        - firebase_credentials
+      vars:
+        GRADLE_USER_HOME: ~/.gradle
+        FIREBASE_TOKEN: $FIREBASE_TOKEN
     scripts:
       - name: Build Android App
         script: |
@@ -24,7 +24,6 @@ workflows:
           artifact_type: 'apk'
           groups: 
             - testers
-    
       email:
         recipients:
           - amr.elskaan@amwal-pay.com
