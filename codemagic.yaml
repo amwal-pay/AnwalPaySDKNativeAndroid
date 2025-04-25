@@ -5,9 +5,9 @@ workflows:
     environment:
     groups:
       - firebase_credentials
-      vars:
-        GRADLE_USER_HOME: ~/.gradle
-        FIREBASE_TOKEN: $FIREBASE_TOKEN # Set this in Codemagic UI
+    vars:
+      GRADLE_USER_HOME: ~/.gradle
+      FIREBASE_TOKEN: $FIREBASE_TOKEN # Set this in Codemagic UI
     scripts:
       - name: Build Android App
         script: |
