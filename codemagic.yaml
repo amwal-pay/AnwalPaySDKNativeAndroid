@@ -5,11 +5,11 @@ workflows:
     environment:
       vars:
         GRADLE_USER_HOME: ~/.gradle
-        APP_CENTER_TOKEN: $APP_CENTER_TOKEN # Set this in Codemagic UI
+        FIREBASE_TOKEN: $FIREBASE_TOKEN # Set this in Codemagic UI
     scripts:
-      - name: Install AppCenter CLI
+      - name: Install Firebase CLI
         script: |
-          npm install -g appcenter-cli@latest
+          npm install -g firebase-tools
       - name: Build Android App
         script: |
           chmod +x ./gradlew
@@ -24,16 +24,14 @@ workflows:
           success: true
           failure: true
       scripts:
-        - name: Upload to AppCenter
+        - name: Upload to Firebase App Distribution
           script: |
             APK_PATH=$(find $CM_BUILD_DIR/app/build/outputs/apk/release -name "*.apk" | head -1)
             if [ -f "$APK_PATH" ]; then
-              appcenter distribute release \
-                --group qc \
-                --file "$APK_PATH" \
-                --app Amwal-Pay/Amwal-Native-SDK \
-                --token "${APP_CENTER_TOKEN}" \
-                --quiet
+              firebase appdistribution:distribute "$APK_PATH" \
+                --app 1:472921504670:android:c0d1d8c1dbe17499a7748f \
+                --token "${FIREBASE_TOKEN}" \
+                --groups "testers"
             else
               echo "Error: APK file not found at $APK_PATH"
               exit 1
