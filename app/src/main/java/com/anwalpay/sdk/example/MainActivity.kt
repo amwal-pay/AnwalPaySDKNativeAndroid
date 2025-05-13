@@ -36,7 +36,7 @@ class MainActivity : ComponentActivity() {
     private fun runSdk(state: PaymentFormState) {
         lifecycleScope.launch {
             val sessionToken = networkClient.fetchSessionToken(
-                env = AmwalSDK.Config.Environment.UAT,
+                env = state.selectedEnv.value,
                 merchantId = state.merchantId.value,
                 customerId = null,
                 secureHashValue = state.secureHash.value
