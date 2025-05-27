@@ -12,7 +12,7 @@ workflows:
       - name: Build Android App
         script: |
           chmod +x ./gradlew
-          ./gradlew assembleRelease 
+          ./gradlew assembleRelease -PversionCode=$CM_BUILD_NUMBER -PversionName="1.0.$CM_BUILD_NUMBER"
     artifacts:
       - app/build/outputs/apk/release/*.apk
     publishing:
