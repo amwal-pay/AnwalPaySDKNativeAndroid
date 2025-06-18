@@ -12,6 +12,11 @@ object StorageClient {
         return context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
     }
 
+    fun removeCustomerId(context: Context){
+        getPrefs(context).edit().remove(CUSTOMER_ID_KEY).apply();
+    }
+
+
     // Save Customer ID in SharedPreferences and update static variable
     fun saveCustomerId(context: Context, customerId: String?) {
         getPrefs(context).edit().putString(CUSTOMER_ID_KEY, customerId).apply()

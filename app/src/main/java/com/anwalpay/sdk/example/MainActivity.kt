@@ -5,7 +5,9 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.lifecycle.lifecycleScope
 import com.anwalpay.sdk.AmwalSDK
 import com.anwalpay.sdk.example.ui.theme.AnwalPaySDKExampleTheme
@@ -25,9 +27,14 @@ class MainActivity : ComponentActivity() {
         setContent {
             AnwalPaySDKExampleTheme {
                 val state = remember { PaymentFormState() }
-                PaymentFormScreen(state) {
-                    runSdk(state)
-                }
+
+                PaymentFormScreen(
+                    state,
+                    onClick = {runSdk(state)},
+                    onDeleteCustomerId = {
+                        StorageClient.removeCustomerId(this@MainActivity)
+                    }
+                );
             }
         }
     }
@@ -46,7 +53,6 @@ class MainActivity : ComponentActivity() {
             if (sessionToken != null) {
                 Log.d("MainActivity", "Session Token: $sessionToken")
                 val customerId = withContext(Dispatchers.IO){StorageClient.getCustomerId(this@MainActivity)}
-
                 val config = AmwalSDK.Config (
                     environment = state.selectedEnv.value,
                     sessionToken = sessionToken,
