@@ -96,6 +96,22 @@ val sessionToken = networkClient.fetchSessionToken(
 
 Configure the SDK with the required parameters:
 
+#### UUID Generation
+
+If you need to generate a custom transaction ID, you can use the built-in UUID generator:
+
+```kotlin
+// Generate a UUID for transaction ID
+val transactionId = AmwalSDK.Config.generateTransactionId()
+
+// Or generate a custom UUID manually
+val customUUID = UUID.randomUUID().toString().lowercase()
+```
+
+The UUID generator creates lowercase UUIDs ensuring compatibility with the payment system.
+
+#### Configuration Example
+
 ```kotlin
 val config = AmwalSDK.Config(
     environment = AmwalSDK.Config.Environment.UAT, // or SIT, PROD
@@ -106,7 +122,8 @@ val config = AmwalSDK.Config(
     terminalId = "YOUR_TERMINAL_ID",
     locale = Locale("en"), // or "ar" for Arabic
     customerId = customerId, // Optional
-    transactionType = AmwalSDK.Config.TransactionType.NFC // For NFC transactions
+    transactionType = AmwalSDK.Config.TransactionType.NFC, // For NFC transactions
+    transactionId = AmwalSDK.Config.generateTransactionId() // Optional: Auto-generated if null
 )
 ```
 
@@ -138,6 +155,19 @@ amwalSDK.start(
 ```
 
 ## Configuration
+
+### Config Parameters
+
+- `environment`: Environment to use (UAT, SIT, PROD)
+- `sessionToken`: Session token from the backend API
+- `currency`: Currency for the transaction (OMR)
+- `amount`: Transaction amount as string
+- `merchantId`: Your merchant identifier
+- `terminalId`: Your terminal identifier
+- `locale`: Language locale (en/ar)
+- `customerId`: Optional customer identifier
+- `transactionType`: Type of transaction (NFC, CARD_WALLET, GOOGLE_PAY)
+- `transactionId`: Optional unique transaction identifier (auto-generated if null)
 
 ### Supported Currencies
 - OMR (Omani Rial)
