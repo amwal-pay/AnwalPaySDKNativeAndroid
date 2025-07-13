@@ -110,6 +110,55 @@ val customUUID = UUID.randomUUID().toString().lowercase()
 
 The UUID generator creates lowercase UUIDs ensuring compatibility with the payment system.
 
+#### Addition Values Configuration
+
+The SDK supports `additionValues` parameter for passing custom key-value pairs that can be used for various SDK functionalities.
+
+##### Default Addition Values
+
+The SDK automatically provides default values:
+- `merchantIdentifier`: "merchant.applepay.amwalpay" (used for Apple Pay configuration)
+
+##### Usage
+
+```kotlin
+// Using default additionValues
+val config = AmwalSDK.Config(
+    environment = AmwalSDK.Config.Environment.UAT,
+    sessionToken = sessionToken,
+    currency = AmwalSDK.Config.Currency.OMR,
+    amount = "100",
+    merchantId = "your_merchant_id",
+    terminalId = "your_terminal_id",
+    locale = Locale("en"),
+    customerId = null,
+    transactionType = AmwalSDK.Config.TransactionType.GOOGLE_PAY,
+    transactionId = AmwalSDK.Config.generateTransactionId(),
+    additionValues = AmwalSDK.Config.generateDefaultAdditionValues()
+)
+
+// Using custom additionValues
+val customAdditionValues = mapOf(
+    "merchantIdentifier" to "merchant.custom.identifier",
+    "customKey" to "customValue"
+)
+
+val config = AmwalSDK.Config(
+    // ... other parameters
+    additionValues = customAdditionValues
+)
+```
+
+##### Available Methods
+
+```kotlin
+// Generate default addition values
+val defaultValues = AmwalSDK.Config.generateDefaultAdditionValues()
+
+// Generate a transaction ID
+val transactionId = AmwalSDK.Config.generateTransactionId()
+```
+
 #### Configuration Example
 
 ```kotlin
@@ -123,7 +172,8 @@ val config = AmwalSDK.Config(
     locale = Locale("en"), // or "ar" for Arabic
     customerId = customerId, // Optional
     transactionType = AmwalSDK.Config.TransactionType.NFC, // For NFC transactions
-    transactionId = AmwalSDK.Config.generateTransactionId() // Optional: Auto-generated if null
+    transactionId = AmwalSDK.Config.generateTransactionId(), // Optional: Auto-generated if null
+    additionValues = AmwalSDK.Config.generateDefaultAdditionValues() // Optional: Custom key-value pairs
 )
 ```
 
@@ -168,6 +218,7 @@ amwalSDK.start(
 - `customerId`: Optional customer identifier
 - `transactionType`: Type of transaction (NFC, CARD_WALLET, GOOGLE_PAY)
 - `transactionId`: Optional unique transaction identifier (auto-generated if null)
+- `additionValues`: Optional custom key-value pairs for SDK configuration (includes merchantIdentifier for Apple Pay)
 
 ### Supported Currencies
 - OMR (Omani Rial)
