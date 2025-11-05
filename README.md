@@ -173,7 +173,8 @@ val config = AmwalSDK.Config(
     customerId = customerId, // Optional
     transactionType = AmwalSDK.Config.TransactionType.NFC, // For NFC transactions
     transactionId = AmwalSDK.Config.generateTransactionId(), // Optional: Auto-generated if null
-    additionValues = AmwalSDK.Config.generateDefaultAdditionValues() // Optional: Custom key-value pairs
+    additionValues = AmwalSDK.Config.generateDefaultAdditionValues(), // Optional: Custom key-value pairs
+    merchantReference = "optional-merchant-reference" // Optional: Merchant reference for transaction tracking
 )
 ```
 

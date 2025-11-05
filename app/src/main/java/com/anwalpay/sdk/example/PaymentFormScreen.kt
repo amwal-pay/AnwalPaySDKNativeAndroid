@@ -87,6 +87,9 @@ fun PaymentFormScreen(
                 CustomTextField("Secret Key", state.secureHash.value) {
                     state.secureHash.value = it
                 }
+                CustomTextField("Merchant Reference (Optional)", state.merchantReference.value) {
+                    state.merchantReference.value = it
+                }
 
                 // Dropdowns
                 CustomDropdown(
@@ -139,6 +142,7 @@ data class PaymentFormState(
     var language: MutableState<String> = mutableStateOf("en"),
     var transactionType: MutableState<TransactionType> = mutableStateOf(TransactionType.NFC),
     var secureHash: MutableState<String> = mutableStateOf("2B03FCDC101D3F160744342BFBA0BEA0E835EE436B6A985BA30464418392C703"),
-    var selectedEnv: MutableState<Environment> = mutableStateOf(Environment.UAT)
+    var selectedEnv: MutableState<Environment> = mutableStateOf(Environment.UAT),
+    var merchantReference: MutableState<String> = mutableStateOf("1234")
 )
 

@@ -68,7 +68,8 @@ class MainActivity : ComponentActivity() {
                         TransactionType.GOOGLE_PAY -> AmwalSDK.Config.TransactionType.GOOGLE_PAY
                     },
                     transactionId = AmwalSDK.Config.generateTransactionId(), // Optional: Can be null for auto-generation
-                    additionValues = AmwalSDK.Config.generateDefaultAdditionValues() // Optional: Includes merchantIdentifier for Apple Pay
+                    additionValues = AmwalSDK.Config.generateDefaultAdditionValues(), // Optional: Includes merchantIdentifier for Apple Pay
+                    merchantReference = if (state.merchantReference.value.isNotBlank()) state.merchantReference.value else null
                 )
                 amwalSDK.start(this@MainActivity,config , onResponse = {
                     Log.d("MainActivity", "Response: $it")
