@@ -42,17 +42,22 @@ class MainActivity : ComponentActivity() {
 
     private fun runSdk(state: PaymentFormState) {
         lifecycleScope.launch {
+            val storedCustomerId = withContext(Dispatchers.IO){StorageClient.getCustomerId(this@MainActivity)}
+            
             val sessionToken = networkClient.fetchSessionToken(
                 env = state.selectedEnv.value,
                 merchantId = state.merchantId.value,
-                customerId = null,
+                customerId = storedCustomerId,
                 secureHashValue = state.secureHash.value
             )
 
             // Handle the session token response
             if (sessionToken != null) {
                 Log.d("MainActivity", "Session Token: $sessionToken")
-                val customerId = withContext(Dispatchers.IO){StorageClient.getCustomerId(this@MainActivity)}
+                
+                // Use stored customerId if available, otherwise it will be null for new customers
+                val customerId = storedCustomerId
+                
                 val config = AmwalSDK.Config (
                     environment = state.selectedEnv.value,
                     sessionToken = sessionToken,
