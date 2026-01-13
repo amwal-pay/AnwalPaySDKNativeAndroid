@@ -18,13 +18,13 @@ import java.util.Locale
 class MainActivity : ComponentActivity() {
 
     private val networkClient by lazy {NetworkClient(this)}
-    private val amwalSDK by lazy {AmwalSDK()}
+    private val amwalSDKWrapper by lazy {AmwalSDKWrapper()}
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         
         // Register the activity launcher for handling back navigation from Flutter
-        amwalSDK.registerActivityLauncher(this)
+        amwalSDKWrapper.registerActivityLauncher(this)
         
         enableEdgeToEdge()
         setContent {
@@ -83,7 +83,7 @@ class MainActivity : ComponentActivity() {
                     ),
                     merchantReference = if (state.merchantReference.value.isNotBlank()) state.merchantReference.value else null
                 )
-                amwalSDK.start(this@MainActivity,config , onResponse = {
+                amwalSDKWrapper.start(this@MainActivity,config , onResponse = {
                     Log.d("MainActivity", "Response: $it")
                 }, onCustomerId = {
                     StorageClient.saveCustomerId(this@MainActivity,it)

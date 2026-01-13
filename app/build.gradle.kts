@@ -59,6 +59,9 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation ("com.amwal-pay:amwal_sdk:+")
+    
+    // Flutter embedding for custom FlutterActivity (same version as SDK)
+    implementation("io.flutter:flutter_embedding_release:1.0.0-e672b006cb34c921db85b8e2f482ed3144a4574b")
 
     implementation(libs.okhttp)
     testImplementation(libs.junit)
