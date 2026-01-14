@@ -5,11 +5,10 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.lifecycle.lifecycleScope
 import com.anwalpay.sdk.AmwalSDK
+import com.anwalpay.sdk.example.ui.colorToHex
 import com.anwalpay.sdk.example.ui.theme.AnwalPaySDKExampleTheme
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -19,15 +18,18 @@ import java.util.Locale
 class MainActivity : ComponentActivity() {
 
     private val networkClient by lazy {NetworkClient(this)}
-    private val amwalSDK by lazy {AmwalSDK()}
+    private val amwalSDKWrapper by lazy {AmwalSDKWrapper()}
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        
+        // Register the activity launcher for handling back navigation from Flutter
+        amwalSDKWrapper.registerActivityLauncher(this)
+        
         enableEdgeToEdge()
         setContent {
             AnwalPaySDKExampleTheme {
                 val state = remember { PaymentFormState() }
-
                 PaymentFormScreen(
                     state,
                     onClick = {runSdk(state)},
@@ -42,8 +44,8 @@ class MainActivity : ComponentActivity() {
 
     private fun runSdk(state: PaymentFormState) {
         lifecycleScope.launch {
+            Log.d("MainActivity", "Got here")
             val storedCustomerId = withContext(Dispatchers.IO){StorageClient.getCustomerId(this@MainActivity)}
-            
             val sessionToken = networkClient.fetchSessionToken(
                 env = state.selectedEnv.value,
                 merchantId = state.merchantId.value,
@@ -53,11 +55,10 @@ class MainActivity : ComponentActivity() {
 
             // Handle the session token response
             if (sessionToken != null) {
+                Log.d("MainActivity", "potato")
                 Log.d("MainActivity", "Session Token: $sessionToken")
-                
-                // Use stored customerId if available, otherwise it will be null for new customers
                 val customerId = storedCustomerId
-                
+
                 val config = AmwalSDK.Config (
                     environment = state.selectedEnv.value,
                     sessionToken = sessionToken,
@@ -73,10 +74,16 @@ class MainActivity : ComponentActivity() {
                         TransactionType.GOOGLE_PAY -> AmwalSDK.Config.TransactionType.GOOGLE_PAY
                     },
                     transactionId = AmwalSDK.Config.generateTransactionId(), // Optional: Can be null for auto-generation
-                    additionValues = AmwalSDK.Config.generateDefaultAdditionValues(), // Optional: Includes merchantIdentifier for Apple Pay
+                    additionValues = mapOf(
+                        "merchantIdentifier" to "merchant.shahd.test",
+                        "primaryColor" to colorToHex(state.primaryColor.value),
+                        "secondaryColor" to colorToHex(state.secondaryColor.value),
+                        "ignoreReceipt" to state.ignoreReceipt.value.toString(),
+                        "useBottomSheetDesign" to state.useBottomSheetDesign.value.toString()
+                    ),
                     merchantReference = if (state.merchantReference.value.isNotBlank()) state.merchantReference.value else null
                 )
-                amwalSDK.start(this@MainActivity,config , onResponse = {
+                amwalSDKWrapper.start(this@MainActivity,config , onResponse = {
                     Log.d("MainActivity", "Response: $it")
                 }, onCustomerId = {
                     StorageClient.saveCustomerId(this@MainActivity,it)
@@ -87,5 +94,3 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-
-
