@@ -86,7 +86,13 @@ class MainActivity : ComponentActivity() {
                 amwalSDKWrapper.start(this@MainActivity,config , onResponse = {
                     Log.d("MainActivity", "Response: $it")
                 }, onCustomerId = {
-                    StorageClient.saveCustomerId(this@MainActivity,it)
+                    // Only save customer ID if it's not null to prevent overwriting existing ID
+                    if (it != null) {
+                        StorageClient.saveCustomerId(this@MainActivity, it)
+                        Log.d("MainActivity", "Customer ID saved: $it")
+                    } else {
+                        Log.d("MainActivity", "Customer ID is null, keeping existing ID")
+                    }
                 })
             } else {
                 Log.e("MainActivity", "Failed to retrieve session token")
