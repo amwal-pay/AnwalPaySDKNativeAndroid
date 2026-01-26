@@ -11,6 +11,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -22,6 +23,9 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable;
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.anwalpay.sdk.example.ui.ColorPickerRow
@@ -38,11 +42,19 @@ import com.anwalpay.sdk.AmwalSDK.Config.Environment
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PaymentFormScreen(state: PaymentFormState,onClick: () -> Unit, onDeleteCustomerId: ()-> Unit) {
+    var showLogsViewer by remember { mutableStateOf(false) }
+    
     Scaffold(
         topBar = {
             TopAppBar(
                 title = { Text("Amwal Pay Demo") },
                 actions = {
+                    IconButton(onClick = { showLogsViewer = true }) {
+                        Icon(
+                            imageVector = Icons.Default.Info,
+                            contentDescription = "View SDK Logs"
+                        )
+                    }
                     IconButton(onClick =  onDeleteCustomerId) {
                         Icon(
                             imageVector = Icons.Default.Delete,
@@ -138,6 +150,13 @@ fun PaymentFormScreen(state: PaymentFormState,onClick: () -> Unit, onDeleteCusto
             }
         }
     )
+    
+    // Show logs viewer dialog
+    if (showLogsViewer) {
+        LogsViewer(
+            onDismiss = { showLogsViewer = false }
+        )
+    }
 }
 
 

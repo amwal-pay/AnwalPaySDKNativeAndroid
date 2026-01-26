@@ -37,6 +37,7 @@ class AmwalSDKWrapper {
             Log.d(TAG, "Activity result received: resultCode=${result.resultCode}")
             if (!hasReceivedResponse) {
                 Log.d(TAG, "No response received from Flutter, treating as cancelled")
+                LogsManager.addLog("Payment cancelled by user", LogType.CANCELLED)
                 pendingOnResponse?.invoke(null)
             }
             hasReceivedResponse = false
@@ -102,6 +103,10 @@ class AmwalSDKWrapper {
                             "onResponse" -> {
                                 val response = call.argument<String?>("response")
                                 Log.d(TAG, "onResponse: $response")
+                                LogsManager.addLog(
+                                    "SDK Response: ${response ?: "null"}",
+                                    LogType.RESPONSE
+                                )
                                 hasReceivedResponse = true
                                 AmwalFlutterActivity.allowFinish = true
                                 onResponse(response)
@@ -110,6 +115,10 @@ class AmwalSDKWrapper {
                             "onCustomerId" -> {
                                 val customerId = call.argument<String?>("customerId")
                                 Log.d(TAG, "onCustomerId: $customerId")
+                                LogsManager.addLog(
+                                    "Customer ID received: ${customerId ?: "null"}",
+                                    LogType.CUSTOMER_ID
+                                )
                                 onCustomerId(customerId)
                                 result.success(0)
                             }

@@ -44,8 +44,16 @@ class MainActivity : ComponentActivity() {
 
     private fun runSdk(state: PaymentFormState) {
         lifecycleScope.launch {
-            Log.d("MainActivity", "Got here")
+            Log.d("MainActivity", "Starting SDK initialization")
+            LogsManager.addLog("Starting SDK initialization", LogType.INFO)
+            
             val storedCustomerId = withContext(Dispatchers.IO){StorageClient.getCustomerId(this@MainActivity)}
+            
+            LogsManager.addLog(
+                "Getting session token for merchant: ${state.merchantId.value}",
+                LogType.INFO
+            )
+            
             val sessionToken = networkClient.fetchSessionToken(
                 env = state.selectedEnv.value,
                 merchantId = state.merchantId.value,
@@ -55,8 +63,9 @@ class MainActivity : ComponentActivity() {
 
             // Handle the session token response
             if (sessionToken != null) {
-                Log.d("MainActivity", "potato")
-                Log.d("MainActivity", "Session Token: $sessionToken")
+                Log.d("MainActivity", "Session token received")
+                LogsManager.addLog("Session token received, initializing SDK", LogType.INFO)
+                
                 val customerId = storedCustomerId
 
                 val config = AmwalSDK.Config (

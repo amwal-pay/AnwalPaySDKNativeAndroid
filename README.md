@@ -112,14 +112,37 @@ The UUID generator creates lowercase UUIDs ensuring compatibility with the payme
 
 #### Addition Values Configuration
 
-The SDK supports `additionValues` parameter for passing custom key-value pairs that can be used for various SDK functionalities.
+The SDK supports `additionValues` parameter for passing custom key-value pairs that can be used for various SDK functionalities including UI customization and payment flow control.
 
 ##### Default Addition Values
 
 The SDK automatically provides default values:
 - `merchantIdentifier`: "merchant.applepay.amwalpay" (used for Apple Pay configuration)
 
-##### Usage
+##### Available Configuration Options
+
+###### UI Customization
+- **`useBottomSheetDesign`**: `"true"` | `"false"` (default: `"false"`)
+  - Controls the payment screen design
+  - `"true"`: Uses the newer bottom sheet design (v2) - slides up from bottom covering 90% of screen
+  - `"false"`: Uses the original full-screen design
+
+- **`primaryColor`**: Hex color string (e.g., `"#FF5733"`)
+  - Sets the primary theme color for the SDK UI
+
+- **`secondaryColor`**: Hex color string (e.g., `"#33FF57"`)
+  - Sets the secondary theme color for the SDK UI
+
+###### Payment Flow
+- **`ignoreReceipt`**: `"true"` | `"false"` (default: `"false"`)
+  - Controls whether to show the receipt screen after transaction
+  - `"true"`: Skips the receipt display
+  - `"false"`: Shows the receipt screen
+
+- **`merchantIdentifier`**: String (default: `"merchant.applepay.amwalpay"`)
+  - Apple Pay merchant identifier for iOS compatibility
+
+##### Usage Examples
 
 ```kotlin
 // Using default additionValues
@@ -137,17 +160,41 @@ val config = AmwalSDK.Config(
     additionValues = AmwalSDK.Config.generateDefaultAdditionValues()
 )
 
-// Using custom additionValues
+// Using custom additionValues with bottom sheet design and colors
 val customAdditionValues = mapOf(
     "merchantIdentifier" to "merchant.custom.identifier",
-    "customKey" to "customValue"
+    "useBottomSheetDesign" to "true",
+    "primaryColor" to "#FF5733",
+    "secondaryColor" to "#33FF57",
+    "ignoreReceipt" to "false"
 )
 
-val config = AmwalSDK.Config(
-    // ... other parameters
+val configWithCustomUI = AmwalSDK.Config(
+    environment = AmwalSDK.Config.Environment.UAT,
+    sessionToken = sessionToken,
+    currency = AmwalSDK.Config.Currency.OMR,
+    amount = "100",
+    merchantId = "your_merchant_id",
+    terminalId = "your_terminal_id",
+    locale = Locale("en"),
+    customerId = null,
+    transactionType = AmwalSDK.Config.TransactionType.CARD_WALLET,
+    transactionId = AmwalSDK.Config.generateTransactionId(),
     additionValues = customAdditionValues
 )
+
+// Minimal configuration with just bottom sheet design
+val minimalCustomValues = mapOf(
+    "useBottomSheetDesign" to "true"
+)
+
+val minimalConfig = AmwalSDK.Config(
+    // ... other required parameters
+    additionValues = minimalCustomValues
+)
 ```
+
+**Note:** All boolean values should be passed as strings (`"true"` or `"false"`). Custom `additionValues` will be merged with defaults, with custom values taking precedence.
 
 ##### Available Methods
 
