@@ -155,7 +155,7 @@ val config = AmwalSDK.Config(
     terminalId = "your_terminal_id",
     locale = Locale("en"),
     customerId = null,
-    transactionType = AmwalSDK.Config.TransactionType.GOOGLE_PAY,
+    transactionType = AmwalSDK.Config.TransactionType.CARD_WALLET,
     transactionId = AmwalSDK.Config.generateTransactionId(),
     additionValues = AmwalSDK.Config.generateDefaultAdditionValues()
 )
@@ -218,7 +218,7 @@ val config = AmwalSDK.Config(
     terminalId = "YOUR_TERMINAL_ID",
     locale = Locale("en"), // or "ar" for Arabic
     customerId = customerId, // Optional
-    transactionType = AmwalSDK.Config.TransactionType.NFC, // For NFC transactions
+    transactionType = AmwalSDK.Config.TransactionType.CARD_WALLET,
     transactionId = AmwalSDK.Config.generateTransactionId(), // Optional: Auto-generated if null
     additionValues = AmwalSDK.Config.generateDefaultAdditionValues(), // Optional: Custom key-value pairs
     merchantReference = "optional-merchant-reference" // Optional: Merchant reference for transaction tracking
@@ -264,7 +264,7 @@ amwalSDK.start(
 - `terminalId`: Your terminal identifier
 - `locale`: Language locale (en/ar)
 - `customerId`: Optional customer identifier
-- `transactionType`: Type of transaction (NFC, CARD_WALLET, GOOGLE_PAY)
+- `transactionType`: Type of transaction (CARD_WALLET, GOOGLE_PAY)
 - `transactionId`: Optional unique transaction identifier (auto-generated if null)
 - `additionValues`: Optional custom key-value pairs for SDK configuration (includes merchantIdentifier for Apple Pay)
 
@@ -419,7 +419,7 @@ HMAC SHA256 hashing ensures data integrity and authenticity between systems.
 ```
 ## Best Practices
 
-1. Always use the appropriate environment (SIT/UAT/PROD) for your use case
+1. Always use the appropriate environment (UAT/PROD) for your use case
 2. Use the correct TransactionType for your payment method
 3. Implement proper error handling for all possible scenarios
 4. Store sensitive data securely using Android's security best practices
