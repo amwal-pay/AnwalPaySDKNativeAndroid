@@ -80,16 +80,18 @@ private val amwalSDK by lazy { AmwalSDK() }
 
 ## Native ABIs
 
+Limiting which CPU architectures ship in your **release** APK keeps download size smaller: native `.so` libraries are duplicated per ABI, so dropping emulator-only slices (`x86` / `x86_64`) reduces the packaged footprint.
+
 **The `amwalsdk` library module already restricts its own native code** to production architectures (`arm64-v8a` and `armeabi-v7a`) via `abiFilters` in its `build.gradle.kts`. This prevents the SDK itself from contributing emulator-only slices to your app.
 
-**Additionally, in your app's `app/build.gradle` (Kotlin DSL: `app/build.gradle.kts`), you should also apply `abiFilters` to ensure the final APK only includes supported architectures:**
+**Additionally, in your app's `app/build.gradle` (Kotlin DSL: `app/build.gradle.kts`), you should also apply `abiFilters`** so the release APK only includes supported architectures and stays smaller:
 
 ```kotlin
 // Kotlin DSL (build.gradle.kts)
 android {
     defaultConfig {
         ndk {
-            // Exclude x86/x86_64 (emulator-only) from production releases
+            // Exclude x86/x86_64 (emulator-only); smaller release APK
             abiFilters += listOf("arm64-v8a", "armeabi-v7a")
         }
     }
@@ -101,7 +103,7 @@ android {
 android {
     defaultConfig {
         ndk {
-            // Exclude x86/x86_64 (emulator-only) from production releases
+            // Exclude x86/x86_64 (emulator-only); smaller release APK
             abiFilters 'arm64-v8a', 'armeabi-v7a'
         }
     }
