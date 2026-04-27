@@ -19,3 +19,8 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+# SLF4J API without a binding (common with transitive libs); suppress R8 missing-class errors.
+# See app/build/outputs/mapping/release/missing_rules.txt after a failed release build.
+-dontwarn org.slf4j.impl.StaticLoggerBinder
+-dontwarn org.slf4j.impl.StaticMDCBinder
