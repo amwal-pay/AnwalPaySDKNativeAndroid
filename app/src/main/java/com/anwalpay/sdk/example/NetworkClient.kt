@@ -1,6 +1,7 @@
 package com.anwalpay.sdk.example;
 
 import android.content.Context
+import android.util.Log
 import com.anwalpay.sdk.AmwalSDK
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -13,6 +14,10 @@ import org.json.JSONObject
 class NetworkClient(private val context: Context) {
 
     private val client = OkHttpClient()
+
+    companion object {
+        private const val TAG = "NetworkClient"
+    }
 
     suspend fun fetchSessionToken(
         env: AmwalSDK.Config.Environment,
@@ -64,6 +69,7 @@ class NetworkClient(private val context: Context) {
                     showErrorDialog(errorMessage)
                 }
             } catch (e: Exception) {
+                Log.e(TAG, "fetchSessionToken failed for url=${webhookUrl}Membership/GetSDKSessionToken", e)
                 showErrorDialog("Something Went Wrong")
             }
             return@withContext null
