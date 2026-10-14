@@ -58,7 +58,7 @@ dependencyResolutionManagement {
 
 ```kotlin
 dependencies {
-    implementation("com.amwal-pay:amwal_sdk:1.0.70")
+    implementation("com.amwal-pay:amwal_sdk:1.1.110")
 }
 ```
 
